@@ -31,6 +31,7 @@
 ## ✨ FEATURE SHOWCASE (1:30 - 6:00)
 
 ### 1. Authentication & Security (1:30 - 2:00)
+
 **[Screen recording: Login/Signup screens]**
 
 "First, we have a secure authentication system. Customers can create accounts using email and password, with options for Google Sign-In integration. All data is securely stored using Firebase, ensuring your business information stays safe."
@@ -38,6 +39,7 @@
 **[Show smooth transitions between login and signup screens]**
 
 ### 2. Smart Jewelry Calculator (2:00 - 3:00)
+
 **[Screen recording: Calculator tab]**
 
 "Now here's where it gets really interesting – the Smart Jewelry Calculator. This is a game-changer for jewelers!
@@ -55,14 +57,17 @@ No more manual calculations, no more errors. Everything is automated and profess
 **[Show calculator in action with real calculations]**
 
 ### 3. Live Gold & Silver Rates (3:00 - 3:30)
+
 **[Screen recording: Coin rates page]**
 
 "The app displays live gold and silver rates that update in real-time. Your customers can check current market prices anytime, building trust and transparency in your business."
 
 ### 4. Product Catalog (3:30 - 4:15)
+
 **[Screen recording: Jewellery catalog]**
 
 "Display your beautiful jewelry collection with a stunning product catalog:
+
 - High-quality image galleries
 - Detailed product descriptions
 - Categories and filtering
@@ -72,9 +77,11 @@ No more manual calculations, no more errors. Everything is automated and profess
 Your customers can browse your entire collection right from their phones!"
 
 ### 5. Business Information & Contact (4:15 - 4:45)
+
 **[Screen recording: About, Contact, Bank Details pages]**
 
 "Essential business features include:
+
 - About page with your business story
 - Contact information with map integration
 - Bank details for easy payments
@@ -83,9 +90,11 @@ Your customers can browse your entire collection right from their phones!"
 Everything your customers need to connect with you!"
 
 ### 6. Push Notifications (4:45 - 5:15)
+
 **[Show notification examples]**
 
 "Stay connected with your customers through Firebase Cloud Messaging:
+
 - New product arrivals
 - Special offers and discounts
 - Gold rate alerts
@@ -95,11 +104,13 @@ Everything your customers need to connect with you!"
 Keep your customers engaged and coming back!"
 
 ### 7. Professional Profile Management (5:15 - 5:45)
+
 **[Screen recording: Profile section]**
 
 "Users can manage their profiles, view order history, save favorites, and manage their preferences – all in one place."
 
 ### 8. Maintenance Mode & Backend Control (5:45 - 6:00)
+
 **[Show briefly]**
 
 "And for you as a business owner, there's a maintenance mode feature that lets you control the app remotely when needed."
@@ -115,10 +126,13 @@ Keep your customers engaged and coming back!"
 **[Show text points on screen as you speak]**
 
 ### ✅ Specialized Experience
+
 I have hands-on experience building jewelry-specific applications with features that actually matter for your business – not generic templates.
 
 ### ✅ Complete Solutions
+
 From design to deployment:
+
 - UI/UX Design tailored for jewelry businesses
 - Android AND iOS apps (one codebase!)
 - Firebase backend integration
@@ -127,6 +141,7 @@ From design to deployment:
 - Post-launch support and maintenance
 
 ### ✅ Modern Technology Stack
+
 - React Native & Expo for fast development
 - Firebase for secure backend
 - Cloud-based solutions for scalability
@@ -134,6 +149,7 @@ From design to deployment:
 - Regular updates and maintenance
 
 ### ✅ Transparent Pricing
+
 I work with feature-wise pricing, so you know exactly what you're paying for. No hidden costs, no surprises.
 
 **[Show pricing document briefly or mention]**
@@ -141,6 +157,7 @@ I work with feature-wise pricing, so you know exactly what you're paying for. No
 Pricing starts from as low as ₹2,000 per feature, with complete app solutions typically ranging from ₹50,000 to ₹1,50,000 depending on your requirements.
 
 ### ✅ Proven Track Record
+
 This app you just saw? It's live, it's working, and it's helping a real jewelry business grow their customer base and streamline their operations.
 
 ---
@@ -242,6 +259,7 @@ Complete app solutions: ₹50,000 - ₹1,50,000
 ## 🎥 PRODUCTION TIPS
 
 ### Visuals to Capture:
+
 1. **Screen recordings** of every feature (smooth, 60fps if possible)
 2. **You on camera** (well-lit, good audio quality)
 3. **B-roll** of:
@@ -251,11 +269,13 @@ Complete app solutions: ₹50,000 - ₹1,50,000
    - Happy customer reactions (if possible)
 
 ### Audio:
+
 - Use a good microphone (lavalier or USB mic)
 - Background music (upbeat, professional, royalty-free)
 - Sound effects for transitions
 
 ### Editing:
+
 - Fast-paced cuts (keep viewers engaged)
 - Text overlays for key points
 - Arrows/circles to highlight features
@@ -263,11 +283,13 @@ Complete app solutions: ₹50,000 - ₹1,50,000
 - Add subscribe animations
 
 ### Thumbnail Ideas:
+
 - Your face + app mockup + "I Built This App"
 - Before/After: Manual vs Digital jewelry business
 - "Jewelry App Developer for Hire" with eye-catching colors
 
 ### SEO Keywords:
+
 jewelry app developer, mobile app for jewelry business, React Native developer India, jewelry business app, freelance app developer, custom app development, jewelry shop app
 
 ---
