@@ -17,21 +17,29 @@ export class PushNotificationService {
     this.firebaseService = FirebaseService.getInstance();
   }
 
-  private async registerTokenWithBackend(token: string): Promise<void> {
+  /**
+   * Register both Expo push token and FCM token with backend.
+   * backend expects an object: { expoToken?: string, fcmToken?: string, platform: 'android'|'ios'|'web' }
+   */
+  /**
+   * Register device using server model: { token: string, meta?: object }
+   * `token` is required by server (unique index). `meta` may include expoToken, fcmToken, platform, device info, etc.
+   */
+  private async registerTokenWithBackend(registration: { token: string; meta?: any }): Promise<void> {
     try {
       const response = await fetch('https://admin-pearl-kappa-34.vercel.app/api/notification', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ token }),
+        body: JSON.stringify(registration),
       });
 
       if (!response.ok) {
         throw new Error(`Failed to persist notification token: ${response.status}`);
       }
 
-      console.log('Notification token registered with backend.');
+      console.log('Notification token registered with backend.', registration);
     } catch (error) {
       console.error('Error storing notification token with backend:', error);
     }
@@ -106,11 +114,38 @@ export class PushNotificationService {
       });
 
       // Get Firebase token if available
+      let fcmToken: string | null = null;
       if (this.firebaseService.isInitialized()) {
-        await this.firebaseService.getMessagingToken();
+        try {
+          fcmToken = await this.firebaseService.getMessagingToken();
+        } catch (error) {
+          console.warn('Failed to get FCM token:', error);
+        }
       }
 
-      await this.registerTokenWithBackend(expoToken);
+      // Prepare registration payload compatible with server model
+      const primaryToken = expoToken ?? fcmToken ?? '';
+      const meta = {
+        expoToken: expoToken ?? null,
+        fcmToken: fcmToken ?? null,
+        platform: Platform.OS,
+        device: {
+          modelName: Device.modelName ?? null,
+          manufacturer: (Device as any).manufacturer ?? null,
+          osName: (Device as any).osName ?? null,
+        },
+        appVersion: Constants.expoConfig?.version ?? null,
+      };
+
+      if (primaryToken) {
+        try {
+          await this.registerTokenWithBackend({ token: primaryToken, meta });
+        } catch (e) {
+          // logged inside registerTokenWithBackend
+        }
+      } else {
+        console.warn('No push token available to register with backend');
+      }
 
       return expoToken;
     } catch (error) {

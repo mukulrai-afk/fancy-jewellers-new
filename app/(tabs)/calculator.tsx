@@ -111,10 +111,10 @@ export default function Calculator() {
     }
 
     if (selectedQuality) {
-      const basePrice = parseFloat(weight) * goldPriceFromContext * selectedQuality.ratio;
-      const makingChargesValue = parseFloat(weight) * goldPriceFromContext * makingRatio;
+      const basePrice = parseFloat(weight) * goldPriceFromContext * 0.1* selectedQuality.ratio;
+      const makingChargesValue = parseFloat(weight) * goldPriceFromContext *0.1* makingRatio;
       const subtotalBeforeGst = basePrice + makingChargesValue + parsedOtherCharges;
-      const gst_charge = (subtotalBeforeGst * 0.003);
+      const gst_charge = (subtotalBeforeGst * 0.03);
       const totalPrice = (subtotalBeforeGst * 1.03) + 45; // 3% GST
 
       setPrice(totalPrice);
@@ -294,7 +294,7 @@ export default function Calculator() {
               <span class="detail-value">₹45</span>
             </div>
             <div class="detail-row">
-              <span class="detail-label">GST (0.3%):</span>
+              <span class="detail-label">GST (3%):</span>
               <span class="detail-value">₹${gst?.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
             </div>
           </div>
@@ -664,7 +664,7 @@ Total: ₹${price?.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
               </View>
 
               <View style={styles.row}>
-                <Text style={styles.label}>GST (0.3%):</Text>
+                <Text style={styles.label}>GST (3%):</Text>
                 <Text style={styles.value}>
                   ₹{gst?.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
                 </Text>
