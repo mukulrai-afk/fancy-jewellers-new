@@ -252,7 +252,7 @@ import { GoldPriceContext } from './_layout';
 const { width, height } = Dimensions.get('window');
 
 export default function Coin() {
-  const { goldPrice: goldPriceFromContext, loading: contextLoading } = useContext(GoldPriceContext);
+  const { goldPrice: goldPriceFromContext, loading: contextLoading, isMaintenanceMode } = useContext(GoldPriceContext);
   const [goldPrice, setGoldPrice] = useState<number>(goldPriceFromContext);
   const [displayGold, setDisplayGold] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -422,11 +422,19 @@ export default function Coin() {
             Crafted with 99.9% pure gold
           </Text>
           
-          {goldPrice && (
+          {!isMaintenanceMode && goldPrice && (
             <View style={styles.liveRateContainer}>
               <View style={styles.liveDot} />
               <Text style={styles.liveRateText}>
                 Live: ₹{goldPrice.toLocaleString('en-IN')}/10g
+              </Text>
+            </View>
+          )}
+          
+          {isMaintenanceMode && (
+            <View style={styles.liveRateContainer}>
+              <Text style={styles.maintenanceRateText}>
+                Under Maintenance
               </Text>
             </View>
           )}
@@ -453,27 +461,40 @@ export default function Coin() {
       >
         <FloatingHeader />
         
-        <Animated.View
-          style={[
-            styles.coinContainer,
-            {
-              opacity: fadeAnim,
-              transform: [{ translateY: slideAnim }]
-            }
-          ]}
-        >
-          {[1, 2, 5, 10, 20, 50, 100].map((weight, index) => (
-            <CoinCard
-              key={weight}
-              weight={weight}
-              price={(weight * goldPrice * 0.1005 + (weight >= 100 ? 2000: weight >= 50 ? 1700 : 
-                weight >= 20 ? 1400 : 
-                weight >= 10 ? 1100 :
-                weight >= 5 ? 800 : 500)) * 1.03}
-              index={index}
-            />
-          ))}
-        </Animated.View>
+        {isMaintenanceMode ? (
+          <View style={styles.maintenanceContainer}>
+            <MaterialCommunityIcons name="wrench" size={80} color="#FFD700" />
+            <Text style={styles.maintenanceTitle}>Under Maintenance</Text>
+            <Text style={styles.maintenanceText}>
+              Coin pricing is temporarily unavailable.
+            </Text>
+            <Text style={styles.maintenanceSubtext}>
+              Please check back later.
+            </Text>
+          </View>
+        ) : (
+          <Animated.View
+            style={[
+              styles.coinContainer,
+              {
+                opacity: fadeAnim,
+                transform: [{ translateY: slideAnim }]
+              }
+            ]}
+          >
+            {[1, 2, 5, 10, 20, 50, 100].map((weight, index) => (
+              <CoinCard
+                key={weight}
+                weight={weight}
+                price={(weight * goldPrice * 0.1005 + (weight >= 100 ? 2000: weight >= 50 ? 1700 : 
+                  weight >= 20 ? 1400 : 
+                  weight >= 10 ? 1100 :
+                  weight >= 5 ? 800 : 500)) * 1.03}
+                index={index}
+              />
+            ))}
+          </Animated.View>
+        )}
         
         <View style={styles.bottomSpacing} />
       </ScrollView>
@@ -545,6 +566,11 @@ const styles = StyleSheet.create({
   },
   liveRateText: {
     color: '#FFD700',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  maintenanceRateText: {
+    color: '#ff9800',
     fontSize: 14,
     fontWeight: '600',
   },
@@ -634,5 +660,31 @@ const styles = StyleSheet.create({
   },
   bottomSpacing: {
     height: 40,
+  },  maintenanceContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 40,
+    paddingVertical: 100,
   },
-});
+  maintenanceTitle: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#FFD700',
+    marginTop: 20,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  maintenanceText: {
+    fontSize: 16,
+    color: '#ccc',
+    textAlign: 'center',
+    marginBottom: 8,
+    lineHeight: 24,
+  },
+  maintenanceSubtext: {
+    fontSize: 14,
+    color: '#888',
+    textAlign: 'center',
+    lineHeight: 20,
+  },});

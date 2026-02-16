@@ -70,31 +70,32 @@ const GoldPriceProvider: React.FC<{ children: React.ReactNode }> = ({ children }
 
       if (!usdRate || isNaN(usdRate)) {
         console.error('Invalid USD rate received:', usdRate);
-        return usd;
+        return { usd, x };
       }
 
       if (!rateX || isNaN(rateX)) {
         console.error('Invalid X rate received:', rateX);
         setX(1); // Fallback to default
+        setUsd(usdRate);
+        return { usd: usdRate, x: 1 };
       } else {
         setX(rateX);
+        setUsd(usdRate);
+        return { usd: usdRate, x: rateX };
       }
-
-      setUsd(usdRate);
-      return usdRate;
     } catch (error) {
       console.error('Error fetching initial rates:', error);
-      return usd;
+      return { usd, x };
     }
-  }, [usd, checkMaintenanceMode]);
+  }, [usd, x, checkMaintenanceMode]);
 
-  const fetchGoldPrice = useCallback(async (currentUsd: number) => {
+  const fetchGoldPrice = useCallback(async (currentUsd: number, currentX: number) => {
     try {
-      console.log('Fetching gold price...');
+      console.log('Fetching gold price with USD:', currentUsd, 'and X:', currentX);
       const response = await axios.get('https://api.gold-api.com/price/XAU');
       const goldApiPrice = response.data.price;
 
-      const calculatedPrice = (goldApiPrice * currentUsd * 0.337) + x;
+      const calculatedPrice = (goldApiPrice * currentUsd * 0.337) + currentX;
 
       setGoldPrice(calculatedPrice);
       setLoading(false);
@@ -103,15 +104,15 @@ const GoldPriceProvider: React.FC<{ children: React.ReactNode }> = ({ children }
       console.error('Error fetching gold price:', error);
       setLoading(false);
     }
-  }, [x]);
+  }, []);
 
   // Function to refresh all data when app becomes active
   const refreshData = useCallback(async () => {
     console.log('Refreshing data due to app state change...');
     setLoading(true);
-    const currentUsd = await initializeRates();
-    if (currentUsd && !isNaN(currentUsd)) {
-      await fetchGoldPrice(currentUsd);
+    const rates = await initializeRates();
+    if (rates && rates.usd && !isNaN(rates.usd) && rates.x && !isNaN(rates.x)) {
+      await fetchGoldPrice(rates.usd, rates.x);
     }
   }, [initializeRates, fetchGoldPrice]);
 
@@ -122,17 +123,17 @@ const GoldPriceProvider: React.FC<{ children: React.ReactNode }> = ({ children }
     const initialize = async () => {
       if (mounted) {
         setLoading(true);
-        const currentUsd = await initializeRates();
-        console.log('Initialization complete. Current USD:', currentUsd);
-        if (currentUsd && !isNaN(currentUsd)) {
-          await fetchGoldPrice(currentUsd);
+        const rates = await initializeRates();
+        console.log('Initialization complete. Rates:', rates);
+        if (rates && rates.usd && !isNaN(rates.usd) && rates.x && !isNaN(rates.x)) {
+          await fetchGoldPrice(rates.usd, rates.x);
         }
       }
     };
 
     const updateGoldPrice = async () => {
-      if (mounted && !isNaN(usd)) {
-        await fetchGoldPrice(usd);
+      if (mounted && !isNaN(usd) && !isNaN(x)) {
+        await fetchGoldPrice(usd, x);
       }
     };
 

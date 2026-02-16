@@ -469,8 +469,34 @@ export default function Dashboard() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [prevAsks, setPrevAsks] = useState<{[key: string]: number}>({});
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const currentImageIndexRef = useRef(0);
   const flatListRef = useRef<FlatList>(null);
   const disclaimerAnim = useRef(new Animated.Value(0)).current;
+  const autoScrollInterval = useRef<NodeJS.Timeout | null>(null);
+
+  const stopAutoScroll = useCallback(() => {
+    if (autoScrollInterval.current) {
+      clearInterval(autoScrollInterval.current);
+      autoScrollInterval.current = null;
+    }
+  }, []);
+
+  const startAutoScroll = useCallback(() => {
+    stopAutoScroll();
+
+    if (heroImages.length <= 1) return;
+
+    autoScrollInterval.current = setInterval(() => {
+      const nextIndex = (currentImageIndexRef.current + 1) % heroImages.length;
+      currentImageIndexRef.current = nextIndex;
+      setCurrentImageIndex(nextIndex);
+
+      flatListRef.current?.scrollToOffset({
+        offset: width * nextIndex,
+        animated: true,
+      });
+    }, 5000); // Change banner every 5 seconds
+  }, [heroImages.length, stopAutoScroll]);
 
   // Notification setup to capture and register device tokens
   const setupNotifications = useCallback(async () => {
@@ -541,6 +567,14 @@ export default function Dashboard() {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
+
+  // Auto-scroll hero banners
+  useEffect(() => {
+    startAutoScroll();
+    return () => {
+      stopAutoScroll();
+    };
+  }, [startAutoScroll, stopAutoScroll]);
 
   useEffect(() => {
     const newAsks: {[key: string]: number} = {};
@@ -722,15 +756,25 @@ export default function Dashboard() {
         horizontal
         showsHorizontalScrollIndicator={false}
         pagingEnabled
+        snapToInterval={width}
+        decelerationRate="fast"
+        getItemLayout={(data, index) => ({
+          length: width,
+          offset: width * index,
+          index,
+        })}
+        onScrollBeginDrag={stopAutoScroll}
         onMomentumScrollEnd={(event) => {
           const newIndex = Math.round(event.nativeEvent.contentOffset.x / width);
+          currentImageIndexRef.current = newIndex;
           setCurrentImageIndex(newIndex);
+          startAutoScroll();
         }}
         onScrollToIndexFailed={(info) => {
           // Handle scroll failure gracefully
           const wait = new Promise(resolve => setTimeout(resolve, 500));
           wait.then(() => {
-            flatListRef.current?.scrollToIndex({ index: info.index, animated: true });
+            flatListRef.current?.scrollToOffset({ offset: width * info.index, animated: true });
           });
         }}
         renderItem={({ item }) => (
@@ -741,18 +785,6 @@ export default function Dashboard() {
                 style={styles.heroImage}
                 resizeMode="cover"
               />
-              <LinearGradient
-                colors={['transparent', 'rgba(0,0,0,0.8)']}
-                style={styles.heroGradient}
-              >
-                <BlurView intensity={10} tint="dark" style={styles.heroOverlay}>
-                  <View style={styles.heroContent}>
-                    <Text style={styles.heroTitle}>{`Banner ${item.poster_no}`}</Text>
-                    <Text style={styles.heroSubtitle}>Discover our finest collection</Text>
-                    <View style={styles.heroAccent} />
-                  </View>
-                </BlurView>
-              </LinearGradient>
             </View>
           </View>
         )}

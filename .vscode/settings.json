@@ -3,5 +3,6 @@
     "source.fixAll": "explicit",
     "source.organizeImports": "explicit",
     "source.sortMembers": "explicit"
-  }
+  },
+  "cmake.sourceDirectory": "/home/pelocal/freelancing/fancy-jewellers-new/node_modules/expo-modules-core/android"
 }
